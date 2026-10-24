@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>孙源源 · 设计作品集 Portfolio</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='14' fill='%23FBF9F4'/%3E%3Ctext x='50' y='68' font-size='52' text-anchor='middle' fill='%23587E7A' font-family='serif'%3E源%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+<style>
+/* ============ 设计 token ============ */
+:root{
+  --paper:#FBFAF6;      /* 更白的宣纸 */
+  --paper-2:#F2EEE5;    /* 极浅暖灰（分节底） */
+  --ink:#26231E;        /* 墨 */
+  --ink-soft:#6F6B62;   /* 淡墨 */
+  --ink-faint:#9A968E;  /* 更淡墨 */
+  --line:#E5E0D6;       /* 细线 */
+  --accent:#52746F;     /* 青瓷 */
+  --accent-2:#A05B37;   /* 赭石 */
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:"Noto Sans SC",-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:var(--paper);color:var(--ink);line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+.serif{font-family:"Noto Serif SC","Songti SC",serif;}
+::selection{background:var(--accent);color:var(--paper);}
+
+/* ============ 顶栏（极简） ============ */
+header{position:sticky;top:0;z-index:200;display:flex;align-items:center;justify-content:space-between;
+  padding:18px 6vw;background:rgba(251,250,246,.92);backdrop-filter:blur(10px);}
+.logo{font-family:"Noto Serif SC",serif;font-weight:700;font-size:17px;letter-spacing:2px;}
+.logo span{color:var(--accent);}
+nav{display:flex;gap:26px;font-size:13.5px;letter-spacing:1px;}
+nav a{color:var(--ink-soft);text-decoration:none;transition:color .2s;}
+nav a:hover{color:var(--accent);}
+
+/* ============ 通用 ============ */
+.wrap{max-width:1120px;margin:0 auto;padding:0 6vw;}
+section{position:relative;}
+
+/* ============ 出场动效：每个板块像独立页面揭示 ============ */
+.rv{opacity:0;transform:translateY(34px);transition:opacity .9s cubic-bezier(.16,.68,.43,.99),transform .9s cubic-bezier(.16,.68,.43,.99);}
+.rv.on{opacity:1;transform:translateY(0);}
+.rv .rv-in{opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s ease;transition-delay:calc(var(--i,0)*120ms);}
+.rv.on .rv-in{opacity:1;transform:translateY(0);}
+
+/* ============ 章节标题（刊物式） ============ */
+.sec{padding:96px 0;}
+.sec-head{display:flex;align-items:baseline;gap:22px;margin-bottom:30px;padding-bottom:16px;border-bottom:1px solid var(--line);}
+.sec-num{font-family:"Noto Serif SC",serif;font-size:14px;letter-spacing:5px;color:var(--accent);white-space:nowrap;}
+.sec-title{font-family:"Noto Serif SC",serif;font-size:clamp(26px,4vw,34px);font-weight:700;letter-spacing:2px;}
+.sec-sub{margin-top:8px;color:var(--ink-soft);font-size:15px;max-width:640px;}
+
+/* ============ Hero（封面） ============ */
+.hero{min-height:100vh;display:flex;align-items:center;position:relative;padding:110px 0 40px;}
+.hero .wrap.hero-wrap{display:flex;align-items:flex-end;justify-content:space-between;gap:72px;}
+.hero .hero-main{flex:1;min-width:0;}
+.hero .kicker{font-size:13px;letter-spacing:6px;color:var(--accent);margin-bottom:22px;}
+.hero h1{font-family:"Noto Serif SC",serif;font-size:clamp(52px,10vw,110px);font-weight:900;line-height:1.05;letter-spacing:4px;}
+.hero h1 .en{display:block;font-family:"Noto Serif SC",serif;font-weight:400;font-size:clamp(16px,2.6vw,26px);letter-spacing:8px;color:var(--ink-soft);margin-top:14px;}
+.hero .tagline{margin-top:34px;max-width:600px;font-size:17px;color:var(--ink-soft);}
+/* 封面板块导航：宽版面靠右，与左侧文字底部对齐 */
+.hero .paths{margin-top:0;display:flex;flex-direction:column;flex:0 0 auto;min-width:330px;}
+.hero .paths a{display:flex;align-items:center;gap:16px;padding:15px 0;border-bottom:1px solid var(--line);
+  text-decoration:none;color:var(--ink);font-family:"Noto Serif SC",serif;font-size:19px;letter-spacing:2px;transition:all .25s;}
+.hero .paths a:hover{color:var(--accent);padding-left:8px;}
+.hero .paths a .idx{font-family:"Noto Sans SC",sans-serif;font-size:12px;letter-spacing:2px;color:var(--ink-faint);flex:0 0 30px;}
+.hero .paths a:hover .idx{color:var(--accent);}
+.hero .scroll-hint{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);font-size:11px;letter-spacing:5px;color:var(--ink-faint);}
+
+/* ============ About（数据驱动） ============ */
+.about-intro p{margin-bottom:18px;font-size:16.5px;color:var(--ink);max-width:760px;line-height:2;}
+.about-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:44px;border-top:1px solid var(--line);}
+.stat{padding:26px 0;border-right:1px solid var(--line);}
+.stat:last-child{border-right:none;}
+.stat .n{font-family:"Noto Serif SC",serif;font-size:34px;font-weight:700;color:var(--accent);}
+.stat .l{font-size:13px;color:var(--ink-soft);letter-spacing:1px;margin-top:4px;}
+.about-facts{margin-top:50px;max-width:760px;}
+.fact-row{display:flex;gap:30px;padding:14px 0;border-bottom:1px solid var(--line);font-size:15px;}
+.fact-row .k{flex:0 0 92px;color:var(--accent);letter-spacing:2px;font-size:13.5px;padding-top:2px;}
+.fact-row .v{color:var(--ink);}
+
+/* ============ 品牌 0→1（分级：每个品牌一整页） ============ */
+.brand-block{margin-bottom:80px;padding-top:10px;}
+.brand-block:last-child{margin-bottom:0;}
+.brand-head{display:flex;align-items:baseline;gap:18px;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:22px;}
+.brand-head .no{font-family:"Noto Serif SC",serif;font-size:26px;font-weight:700;color:var(--accent);}
+.brand-head h3{font-family:"Noto Serif SC",serif;font-size:28px;font-weight:700;letter-spacing:1px;}
+.brand-head .en{color:var(--ink-faint);font-size:13px;letter-spacing:2px;}
+.brand-grid{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:start;}
+.brand-media{position:relative;}
+.brand-media .main-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;cursor:zoom-in;background:var(--paper-2);}
+.brand-media .sub-imgs{display:flex;gap:12px;justify-content:center;margin-top:12px;}
+.brand-media .sub-imgs img{width:44%;aspect-ratio:1/1;object-fit:cover;display:block;cursor:zoom-in;background:var(--paper-2);}
+.brand-info .cat{font-size:12px;letter-spacing:3px;color:var(--accent);margin-bottom:12px;}
+.brand-info h3{font-family:"Noto Serif SC",serif;font-size:26px;font-weight:700;margin-bottom:8px;}
+.brand-info .en{color:var(--ink-faint);font-size:13px;letter-spacing:2px;margin-bottom:18px;}
+.brand-info .desc{font-size:15.5px;color:var(--ink);margin-bottom:22px;line-height:2;}
+.brand-info .points{display:flex;flex-direction:column;gap:10px;}
+.brand-info .point{display:flex;gap:12px;align-items:baseline;font-size:14.5px;color:var(--ink-soft);}
+.brand-info .point b{color:var(--accent-2);font-weight:700;font-size:14px;}
+.brand-strip{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
+.brand-strip img{width:calc((100% - 16px)/3);aspect-ratio:4/3;object-fit:cover;display:block;cursor:zoom-in;background:var(--paper-2);}
+
+/* ============ 纤维创作（分级：大类+作品流） ============ */
+.fiber-group{margin-bottom:64px;}
+.fiber-group-head{display:flex;align-items:baseline;gap:14px;margin-bottom:28px;}
+.fiber-group-head .name{font-family:"Noto Serif SC",serif;font-size:21px;font-weight:700;letter-spacing:2px;color:var(--ink);}
+.fiber-group-head .count{font-size:12px;color:var(--ink-faint);letter-spacing:1px;}
+.fiber-list{border-top:1px solid var(--line);}
+.fiber-item{display:grid;grid-template-columns:200px 1fr;gap:34px;padding:34px 0;border-bottom:1px solid var(--line);align-items:center;}
+.fiber-item .ph{width:200px;aspect-ratio:4/3;object-fit:cover;display:block;cursor:zoom-in;background:var(--paper-2);}
+.fiber-item .txt .top{display:flex;align-items:baseline;gap:14px;}
+.fiber-item .txt h4{font-family:"Noto Serif SC",serif;font-size:22px;font-weight:700;letter-spacing:1px;}
+.fiber-item .txt .year{color:var(--accent);font-size:12.5px;letter-spacing:1px;}
+.fiber-item .txt .en{color:var(--ink-faint);font-size:12.5px;letter-spacing:1px;margin-top:3px;}
+.fiber-item .txt .desc{margin-top:12px;font-size:14.5px;color:var(--ink-soft);max-width:640px;line-height:1.9;}
+.fiber-item .txt .meta{margin-top:12px;font-size:10px;letter-spacing:2px;color:var(--accent);cursor:pointer;}
+/* ============ 花鸟历专属：封面 + 可滚动小图带 ============ */
+.lisustrip-item{grid-template-columns:400px 1fr;align-items:flex-start;}
+.lisustrip-media{display:flex;flex-direction:column;gap:12px;align-items:flex-start;min-width:0;}
+.lisustrip-item .ph-cover{width:100%;max-width:100%;aspect-ratio:16/9;object-fit:cover;display:block;cursor:zoom-in;background:var(--paper-2);min-width:0;}
+.lisustrip-strip{display:flex;flex-direction:row;gap:8px;width:100%;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;padding-bottom:2px;}
+.lisustrip-strip .strip-thumb{width:72px;height:41px;object-fit:cover;display:block;cursor:zoom-in;background:var(--paper-2);flex:none;}
+.award-edit{margin-top:8px;font-size:11px;letter-spacing:0.5px;color:var(--ink-faint);line-height:1.75;font-weight:400;}
+.award-edit:empty{display:none;}
+
+/* ============ 审美习作（去框网格） ============ */
+.aes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:34px 44px;}
+.aes-item .ph{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;cursor:zoom-in;background:var(--paper-2);}
+.aes-item .cat{margin-top:12px;font-size:11.5px;letter-spacing:3px;color:var(--accent);}
+.aes-item h4{font-family:"Noto Serif SC",serif;font-size:18px;font-weight:700;margin-top:3px;letter-spacing:1px;}
+.aes-item .en{color:var(--ink-faint);font-size:12px;letter-spacing:1px;margin-top:2px;}
+
+/* ============ 实践（时间线式） ============ */
+.exp-item{position:relative;padding:30px 0;border-bottom:1px solid var(--line);}
+.exp-item .t{font-family:"Noto Serif SC",serif;font-size:20px;font-weight:700;letter-spacing:1px;}
+.exp-item .r{color:var(--accent-2);font-size:13px;letter-spacing:1px;margin:6px 0 12px;}
+.exp-item .d{font-size:14.5px;color:var(--ink-soft);line-height:1.95;max-width:760px;}
+.exp-imgs{display:flex;flex-wrap:wrap;gap:12px;margin-top:14px;}
+.exp-imgs img{width:200px;aspect-ratio:4/3;object-fit:cover;display:block;cursor:zoom-in;background:var(--paper-2);}
+.tl-list{border-top:1px solid var(--line);}
+.tl-row{display:flex;gap:22px;padding:15px 0;border-bottom:1px solid var(--line);font-size:15px;}
+.tl-row .yr{flex:0 0 70px;font-family:"Noto Serif SC",serif;font-weight:700;color:var(--accent);}
+.tl-row .txt{color:var(--ink);}
+
+/* ============ 联系（无框，纯排版） ============ */
+.contact{padding:110px 0 90px;}
+.contact .sec-head{border-bottom-color:var(--line);}
+.contact-grid{display:flex;flex-wrap:wrap;gap:16px 52px;}
+.contact-item{flex:0 0 auto;padding:14px 0;min-width:0;}
+.contact-item .k{font-size:12px;letter-spacing:3px;color:var(--accent);margin-bottom:8px;}
+.contact-item .v{font-size:15.5px;font-weight:500;white-space:nowrap;}
+
+footer{padding:44px 6vw;text-align:center;font-size:12.5px;color:var(--ink-faint);letter-spacing:2px;border-top:1px solid var(--line);}
+
+/* ============ 灯箱 ============ */
+#lightbox{position:fixed;inset:0;z-index:950;background:rgba(28,24,19,.95);
+  display:none;align-items:center;justify-content:center;}
+#lightbox.on{display:flex;}
+.lb-stage{max-width:94vw;max-height:90vh;overflow:auto;display:flex;align-items:center;justify-content:center;cursor:zoom-in;scrollbar-width:thin;}
+#lightbox img{max-width:92vw;max-height:88vh;object-fit:contain;user-select:none;}
+#lightbox img.lb-zoom{max-width:none;max-height:none;width:auto;height:auto;cursor:zoom-out;}
+#lbCount{position:absolute;top:24px;right:30px;color:#cdc2b2;font-size:13px;letter-spacing:2px;font-family:"Noto Sans SC",sans-serif;}
+#lbAward{position:absolute;bottom:52px;left:50%;transform:translateX(-50%);color:#cdc2b2;font-size:12px;letter-spacing:1px;line-height:1.8;text-align:center;max-width:84vw;pointer-events:none;font-family:"Noto Sans SC",sans-serif;}
+#lbAward:empty{display:none;}
+#lbPrev,#lbNext{position:absolute;top:50%;transform:translateY(-50%);width:58px;height:58px;display:flex;align-items:center;justify-content:center;
+  color:#cdc2b2;font-size:34px;cursor:pointer;opacity:.55;transition:.18s;user-select:none;background:none;border:0;}
+#lbPrev:hover,#lbNext:hover{opacity:1;color:#fff;}
+#lbPrev{left:22px;} #lbNext{right:22px;}
+#lightbox .lb-hint{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);color:#8d8377;font-size:12px;letter-spacing:1px;pointer-events:none;}
+
+/* ============ 编辑入口 ============ */
+#editFab{position:fixed;right:22px;bottom:22px;z-index:900;width:52px;height:52px;border-radius:50%;
+  background:var(--paper);color:var(--accent);border:1px solid var(--line);cursor:pointer;font-size:12px;letter-spacing:1px;
+  box-shadow:0 2px 10px rgba(38,35,30,.12);transition:all .2s;}
+#editFab:hover{transform:scale(1.06);}
+body.editing #editFab{background:var(--accent);color:var(--paper);border-color:var(--accent);}
+
+/* ============ 编辑模式 ============ */
+body.editing [contenteditable]{outline:1px dashed rgba(160,91,55,.55);cursor:text;transition:all .15s;border-radius:2px;}
+body.editing [contenteditable]:hover{outline-color:var(--accent);background:rgba(82,116,111,.05);}
+body.editing [contenteditable]:focus{outline:2px solid var(--accent);background:var(--paper);}
+body.editing .sec-head,body.editing .brand-head,body.editing .fiber-group-head{position:relative;}
+.tools{position:absolute;top:-14px;right:0;z-index:40;display:none;gap:6px;}
+body.editing [data-item]:hover .tools{display:flex;}
+.tools button{width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--paper);
+  color:var(--ink);font-size:14px;cursor:pointer;box-shadow:0 2px 8px rgba(38,35,30,.15);transition:all .15s;}
+.tools button:hover{background:var(--accent);color:var(--paper);border-color:var(--accent);}
+.tools .del:hover{background:#9C3D2E;border-color:#9C3D2E;}
+.add-sec{display:block;margin:28px auto 0;padding:9px 24px;border-radius:40px;border:1px dashed var(--line);
+  background:transparent;color:var(--ink-soft);font-size:13.5px;letter-spacing:1px;cursor:pointer;transition:all .2s;}
+.add-sec:hover{border-color:var(--accent);color:var(--accent);background:rgba(82,116,111,.04);}
+#editBar{position:fixed;top:0;left:0;right:0;z-index:980;background:var(--ink);color:var(--paper);
+  padding:9px 5vw;display:none;align-items:center;justify-content:space-between;gap:14px;font-size:12.5px;letter-spacing:1px;}
+body.editing #editBar{display:flex;}
+#editBar .tip{flex:1;}
+#editBar .actions{display:flex;gap:8px;flex-wrap:wrap;}
+#editBar .btn{padding:6px 13px;border-radius:4px;border:none;cursor:pointer;font-size:12.5px;letter-spacing:1px;}
+#editBar .btn-exit{background:var(--accent);color:var(--paper);}
+#editBar .btn-reset{background:transparent;color:#E8B4A8;border:1px solid rgba(232,180,168,.4);}
+#editBar .btn-export{background:transparent;color:var(--paper);border:1px solid rgba(251,250,246,.4);}
+#editBar .btn-mobile{background:var(--accent-2);color:var(--paper);border:none;}
+#editBar .btn-mobile.on{background:var(--paper);color:var(--accent-2);border:1px solid var(--accent-2);}
+body.editing{scroll-padding-top:60px;}
+#toast{position:fixed;left:50%;bottom:88px;transform:translateX(-50%) translateY(20px);z-index:990;
+  background:var(--ink);color:var(--paper);padding:10px 22px;border-radius:6px;font-size:13px;letter-spacing:1px;
+  opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;box-shadow:0 4px 18px rgba(38,35,30,.2);}
+#toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ============ 响应式 ============ */
+@media(max-width:900px){
+  nav{display:none;}
+  .hero .wrap.hero-wrap{flex-direction:column;align-items:flex-start;gap:0;}
+  .hero .paths{margin-top:48px;min-width:0;width:100%;}
+  .brand-grid{grid-template-columns:1fr;gap:24px;}
+  .brand-strip{gap:8px;}
+  .brand-strip img{width:31%;aspect-ratio:4/3;}
+  .fiber-item{grid-template-columns:1fr;gap:18px;}
+  .fiber-item .ph{width:100%;aspect-ratio:16/9;}
+  .aes-grid{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:640px){
+  .sec{padding:44px 0;}
+  .sec-head{flex-wrap:wrap;gap:8px 14px;margin-bottom:18px;}
+  .sec-num{font-size:11px;letter-spacing:3px;}
+  .sec-title{font-size:22px;letter-spacing:1px;}
+  .sec-sub{font-size:13px;line-height:1.7;}
+  .wrap{padding:0 5vw;}
+  /* Hero 封面 */
+  .hero{min-height:auto;padding:60px 0 32px;}
+  .hero .kicker{font-size:11px;letter-spacing:2px;margin-bottom:14px;line-height:1.6;}
+  .hero h1{font-size:clamp(30px,11vw,44px);letter-spacing:2px;line-height:1.08;}
+  .hero h1 .en{font-size:13px;letter-spacing:3px;margin-top:10px;line-height:1.6;}
+  .hero .tagline{font-size:14px;line-height:1.75;margin-top:20px;}
+  .hero .paths{margin-top:38px;}
+  .hero .paths a{font-size:15px;padding:12px 0;gap:12px;letter-spacing:1px;}
+  .hero .paths a .idx{font-size:11px;flex:0 0 24px;}
+  .hero .scroll-hint{bottom:16px;font-size:10px;}
+  /* About 简介 */
+  .about-intro p{font-size:14.5px;line-height:1.85;margin-bottom:14px;}
+  .about-stats{grid-template-columns:1fr;margin-top:30px;}
+  .stat{padding:14px 0;border-right:none;border-bottom:1px solid var(--line);}
+  .stat .n{font-size:24px;}
+  .stat .l{font-size:12px;}
+  .about-facts{margin-top:30px;}
+  .fact-row{flex-direction:column;gap:4px;padding:11px 0;font-size:14px;line-height:1.7;}
+  .fact-row .k{flex:0 0 auto;font-size:12px;letter-spacing:1px;}
+  /* 品牌 / 纤维 / 研究 / 审美 / 展览 通用字号 */
+  .brand-head{flex-wrap:wrap;gap:6px 12px;}
+  .brand-head h3{font-size:21px;}
+  .brand-head .no{font-size:19px;}
+  .brand-head .en{font-size:11px;flex-basis:100%;}
+  .brand-info h3{font-size:21px;}
+  .brand-info .desc{font-size:14px;line-height:1.85;}
+  .brand-info .point{font-size:13.5px;}
+  .fiber-group{margin-bottom:48px;}
+  .fiber-group-head{flex-wrap:wrap;gap:6px 12px;margin-bottom:18px;}
+  .fiber-group-head .name{font-size:18px;}
+  .fiber-group-head .count{font-size:12px;}
+  .fiber-item .txt h4{font-size:18px;}
+  .fiber-item .txt .desc{font-size:14px;line-height:1.8;}
+  .fiber-item .txt .meta{font-size:10px;}
+  /* 花鸟历小图带移动端：封面在上、缩略图横向滚动 */
+  .lisustrip-item{grid-template-columns:1fr;}
+  .lisustrip-media{flex-direction:row;gap:10px;align-items:flex-start;}
+  .lisustrip-item .ph-cover{flex:1;min-width:0;height:auto;aspect-ratio:16/9;}
+  .lisustrip-strip{flex-direction:column;width:96px;max-height:230px;overflow-y:auto;overflow-x:hidden;gap:7px;}
+  .lisustrip-strip .strip-thumb{width:96px;height:54px;flex:none;}
+  .aes-item h4{font-size:15px;}
+  .aes-item .cat,.aes-item .desc{font-size:13px;}
+  .exp-item .t{font-size:16px;}
+  .exp-item .r{font-size:12px;}
+  .exp-item .d{font-size:13.5px;line-height:1.8;}
+  .exp-imgs{gap:8px;margin-top:12px;}
+  .exp-imgs img{width:31%;aspect-ratio:4/3;}
+  .tl-row{font-size:13px;flex-wrap:wrap;gap:6px;}
+  .exh .yr{font-size:15px;}
+  .exh .t{font-size:14px;}
+  .contact .v{font-size:14px;}
+  .contact .k{font-size:12px;}
+  .logo{font-size:14px;}
+  footer{font-size:11px;line-height:1.7;}
+}
+/* 手机预览：编辑态强制手机版布局（任意宽度下模拟手机渲染） */
+html.preview-mobile nav{display:none;}
+html.preview-mobile .wrap{padding:0 5vw;}
+html.preview-mobile .sec{padding:44px 0;}
+html.preview-mobile .sec-head{flex-wrap:wrap;gap:8px 14px;margin-bottom:18px;}
+html.preview-mobile .sec-num{font-size:11px;letter-spacing:3px;}
+html.preview-mobile .sec-title{font-size:22px;letter-spacing:1px;}
+html.preview-mobile .sec-sub{font-size:13px;line-height:1.7;}
+html.preview-mobile .hero{min-height:auto;padding:60px 0 32px;}
+html.preview-mobile .hero .wrap.hero-wrap{flex-direction:column;align-items:flex-start;gap:0;}
+html.preview-mobile .hero .kicker{font-size:11px;letter-spacing:2px;margin-bottom:14px;line-height:1.6;}
+html.preview-mobile .hero h1{font-size:clamp(30px,11vw,44px);letter-spacing:2px;line-height:1.08;}
+html.preview-mobile .hero h1 .en{font-size:13px;letter-spacing:3px;margin-top:10px;line-height:1.6;}
+html.preview-mobile .hero .tagline{font-size:14px;line-height:1.75;margin-top:20px;}
+html.preview-mobile .hero .paths{margin-top:38px;min-width:0;width:100%;}
+html.preview-mobile .hero .paths a{font-size:15px;padding:12px 0;gap:12px;letter-spacing:1px;}
+html.preview-mobile .hero .paths a .idx{font-size:11px;flex:0 0 24px;}
+html.preview-mobile .hero .scroll-hint{bottom:16px;font-size:10px;}
+html.preview-mobile .about-intro p{font-size:14.5px;line-height:1.85;margin-bottom:14px;}
+html.preview-mobile .about-stats{grid-template-columns:1fr;margin-top:30px;}
+html.preview-mobile .stat{padding:14px 0;border-right:none;border-bottom:1px solid var(--line);}
+html.preview-mobile .stat .n{font-size:24px;}
+html.preview-mobile .stat .l{font-size:12px;}
+html.preview-mobile .about-facts{margin-top:30px;}
+html.preview-mobile .fact-row{flex-direction:column;gap:4px;padding:11px 0;font-size:14px;line-height:1.7;}
+html.preview-mobile .fact-row .k{flex:0 0 auto;font-size:12px;letter-spacing:1px;}
+html.preview-mobile .brand-grid{grid-template-columns:1fr;gap:24px;}
+html.preview-mobile .brand-strip{gap:8px;}
+html.preview-mobile .brand-strip img{width:31%;aspect-ratio:4/3;}
+html.preview-mobile .brand-head{flex-wrap:wrap;gap:6px 12px;}
+html.preview-mobile .brand-head h3{font-size:21px;}
+html.preview-mobile .brand-head .no{font-size:19px;}
+html.preview-mobile .brand-head .en{font-size:11px;flex-basis:100%;}
+html.preview-mobile .brand-info h3{font-size:21px;}
+html.preview-mobile .brand-info .desc{font-size:14px;line-height:1.85;}
+html.preview-mobile .brand-info .point{font-size:13.5px;}
+html.preview-mobile .fiber-item{grid-template-columns:1fr;gap:18px;}
+html.preview-mobile .fiber-item .ph{width:100%;aspect-ratio:16/9;}
+html.preview-mobile .fiber-group{margin-bottom:48px;}
+html.preview-mobile .fiber-group-head{flex-wrap:wrap;gap:6px 12px;margin-bottom:18px;}
+html.preview-mobile .fiber-group-head .name{font-size:18px;}
+html.preview-mobile .fiber-group-head .count{font-size:12px;}
+html.preview-mobile .fiber-item .txt h4{font-size:18px;}
+html.preview-mobile .fiber-item .txt .desc{font-size:14px;line-height:1.8;}
+html.preview-mobile .fiber-item .txt .meta{font-size:10px;}
+html.preview-mobile .lisustrip-item{grid-template-columns:1fr;}
+html.preview-mobile .lisustrip-media{flex-direction:row;gap:10px;align-items:flex-start;}
+html.preview-mobile .lisustrip-item .ph-cover{flex:1;min-width:0;height:auto;aspect-ratio:16/9;}
+html.preview-mobile .lisustrip-strip{flex-direction:column;width:96px;max-height:230px;overflow-y:auto;overflow-x:hidden;gap:7px;}
+html.preview-mobile .lisustrip-strip .strip-thumb{width:96px;height:54px;flex:none;}
+html.preview-mobile .aes-grid{grid-template-columns:1fr;}
+html.preview-mobile .aes-item h4{font-size:15px;}
+html.preview-mobile .aes-item .cat,.aes-item .desc{font-size:13px;}
+html.preview-mobile .exp-item .t{font-size:16px;}
+html.preview-mobile .exp-item .r{font-size:12px;}
+html.preview-mobile .exp-item .d{font-size:13.5px;line-height:1.8;}
+html.preview-mobile .tl-row{font-size:13px;flex-wrap:wrap;gap:6px;}
+html.preview-mobile .exp-imgs{gap:8px;margin-top:12px;}
+html.preview-mobile .exp-imgs img{width:31%;aspect-ratio:4/3;}
+html.preview-mobile .exh .yr{font-size:15px;}
+html.preview-mobile .exh .t{font-size:14px;}
+html.preview-mobile .contact .v{font-size:14px;}
+html.preview-mobile .contact .k{font-size:12px;}
+html.preview-mobile .logo{font-size:14px;}
+html.preview-mobile footer{font-size:11px;line-height:1.7;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">孙源源 <span>·</span> Portfolio</div>
+  <nav>
+    <a href="#about">简介</a>
+    <a href="#fiber">纤维创作</a>
+    <a href="#research">研究项目</a>
+    <a href="#brand">品牌策划</a>
+    <a href="#aesthetic">审美习作</a>
+    <a href="#exhibit">展览荣誉</a>
+  </nav>
+</header>
+
+<!-- ===== Hero 封面 ===== -->
+<section class="hero" id="top">
+  <div class="wrap hero-wrap">
+    <div class="hero-main">
+      <div class="kicker rv"><span id="heroKicker" contenteditable="false">SUN YUANYUAN · 现代艺术 / 工艺美术 / 品牌设计</span></div>
+      <h1 class="rv">孙源源<span class="en" id="heroEn">SUN YUANYUAN · PORTFOLIO</span></h1>
+      <p class="tagline rv" id="heroTagline">清华大学美术学院工艺美术系 · 纤维艺术方向硕士在读。以传统工艺与材料为笔，专注于文化转译、品牌叙事与当代纤维艺术创作，让东方美学在现代生活中落地生根。</p>
+    </div>
+    <nav class="paths rv">
+      <a href="#about"><span class="idx">01</span>个人简介</a>
+      <a href="#fiber"><span class="idx">02</span>纤维艺术创作</a>
+      <a href="#research"><span class="idx">03</span>研究 · 设计项目类</a>
+      <a href="#brand"><span class="idx">04</span>品牌 0→1 策划</a>
+      <a href="#aesthetic"><span class="idx">05</span>审美习作</a>
+      <a href="#exhibit"><span class="idx">06</span>展览 · 实践 · 荣誉</a>
+    </nav>
+  </div>
+  <div class="scroll-hint">向下滚动 · SCROLL</div>
+</section>
+
+<!-- ===== About 简介（数据驱动） ===== -->
+<section class="sec" id="about">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="sec-num">01 / ABOUT</div>
+      <h2 class="sec-title">个人简介</h2>
+    </div>
+    <div class="about-intro rv" id="aboutIntro"><p contenteditable="false">我是孙源源，清华大学美术学院工艺美术系纤维艺术专业硕士在读（2024级，导师岳嵩副教授），本科同专业保研，本硕一体化深耕纤维艺术与传统文化创新设计。</p>
+      <p contenteditable="false">我的创作与设计实践跨越纤维艺术、品牌策划、非遗工艺转译与文创产品开发多个维度。曾以核心执行成员身份深度参与第13届「从洛桑到北京」国际纤维艺术双年展全流程，在中国华侨历史博物馆担任策展助理，并自主孵化「青囊」中药哲学文化品牌与「Buplay 布和你玩」手工织物品牌。</p>
+      <p contenteditable="false">作为中共党员与双肩挑德育工作助理，我同时承担奖助贷专项统筹与基层党务工作，兼具艺术创作者、设计统筹者与社会服务者的多重身份。</p></div>
+    <div class="about-stats rv">
+      <div class="stat"><div class="n" id="stat1n">3.9</div><div class="l" id="stat1l">综合 GPA</div></div>
+      <div class="stat"><div class="n" id="stat2n">20+</div><div class="l" id="stat2l">参展 / 获奖成果</div></div>
+      <div class="stat"><div class="n" id="stat3n">2</div><div class="l" id="stat3l">自主孵化品牌</div></div>
+    </div>
+    <div class="about-facts rv">
+      <div class="fact-row"><div class="k">教育</div><div class="v">清华大学美术学院 · 工艺美术（纤维艺术）<br>本科 2020–2024 · 硕士 2024–至今</div></div>
+      <div class="fact-row"><div class="k">身份</div><div class="v">中共党员 · 中国工艺美术学会会员<br>纤维艺术专委会秘书处成员</div></div>
+      <div class="fact-row"><div class="k">能力</div><div class="v">纤维艺术 · 品牌策划 · 视觉设计<br>非遗工艺 · 策展统筹 · 文创开发</div></div>
+      <div class="fact-row"><div class="k">软件</div><div class="v">Illustrator / Photoshop / InDesign<br>编织 / 刺绣 / 毡化等工艺</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Fiber 纤维创作 ===== -->
+<section class="sec" id="fiber">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="sec-num">02 / FIBER ART</div>
+      <h2 class="sec-title">纤维艺术创作</h2>
+    </div>
+    <div class="sec-sub rv" style="margin-bottom:50px;">立足纸纤维、羊毛、竹编等综合材料，作品持续入选国家级与行业专业展览，探索材料、工艺与情感的对话。</div>
+    <div id="fiberGroups"></div>
+  </div>
+</section>
+
+<!-- ===== Research 研究/设计项目类 ===== -->
+<section class="sec" id="research">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="sec-num">03 / RESEARCH &amp; PROJECTS</div>
+      <h2 class="sec-title">研究 · 设计项目类</h2>
+    </div>
+    <div class="sec-sub rv" style="margin-bottom:50px;">涵盖文创设计与非遗工艺转化等研究实践项目，探索传统文化资源在当代设计语境中的创造性转译与落地。</div>
+    <div id="researchList"></div>
+  </div>
+</section>
+
+<!-- ===== Brand 品牌 0→1 ===== -->
+<section class="sec" id="brand">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="sec-num">04 / BRAND 0→1</div>
+      <h2 class="sec-title">品牌策划 · 从零到一</h2>
+    </div>
+    <div class="sec-sub rv" style="margin-bottom:50px;">从文化洞察、品牌定位、产品体系到商业落地，完整呈现两段自主孵化的原创品牌实践，以及非遗文创系列设计。</div>
+    <div id="brandBlocks"></div>
+  </div>
+</section>
+
+<!-- ===== Aesthetic 审美习作 ===== -->
+<section class="sec" id="aesthetic">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="sec-num">05 / CRAFT &amp; AESTHETICS</div>
+      <h2 class="sec-title">审美习作</h2>
+    </div>
+    <div class="sec-sub rv" style="margin-bottom:50px;">插画、陶瓷、篆刻、国画、板绘与标志设计等基础训练，体现对材料、色彩与东方美学的长期积累。</div>
+    <div class="aes-grid" id="aesGrid"></div>
+  </div>
+</section>
+
+<!-- ===== Exhibit 展览·实践·荣誉 ===== -->
+<section class="sec" id="exhibit">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="sec-num">06 / PRACTICE &amp; HONORS</div>
+      <h2 class="sec-title">展览 · 实践 · 荣誉</h2>
+    </div>
+    <h3 class="fiber-group-head rv" style="margin-top:10px;"><span class="name">大型学术展览与实践</span></h3>
+    <div id="expList"></div>
+    <h3 class="fiber-group-head rv" style="margin-top:60px;"><span class="name">作品参展成果</span></h3>
+    <div class="tl-list" id="exhibitList"></div>
+    <h3 class="fiber-group-head rv" style="margin-top:60px;"><span class="name">荣誉与获奖</span></h3>
+    <div class="tl-list" id="honorList"></div>
+  </div>
+</section>
+
+<!-- ===== Contact ===== -->
+<section class="sec contact" id="contact">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="sec-num">07 / CONTACT</div>
+      <h2 class="sec-title">联系方式</h2>
+    </div>
+    <div class="contact-grid rv">
+      <div class="contact-item"><div class="k">邮箱</div><div class="v">sunyy24@mails.tsinghua.edu.cn</div></div>
+      <div class="contact-item"><div class="k">学校</div><div class="v">清华大学</div></div>
+      <div class="contact-item"><div class="k">坐标</div><div class="v">北京</div></div>
+      <div class="contact-item"><div class="k">求职方向</div><div class="v">产品设计 / 品牌策划 / 文博策展</div></div>
+    </div>
+  </div>
+</section>
+
+<footer>孙源源 · SUN YUANYUAN · 纤维艺术 / 文化设计 / 品牌策划 · 作品集</footer>
+
+<input type="file" id="imgFileInput" accept="image/*" style="display:none">
+<button id="editFab" title="内容管理">管理</button>
+<div id="lightbox"><div class="lb-stage"><img id="lightboxImg" alt=""></div><div id="lbCount"></div><div id="lbAward"></div><div id="lbPrev">‹</div><div id="lbNext">›</div><div class="lb-hint">点击图片放大查看 · 再点返回 · 滚动/方向键切换 · 点击空白关闭</div></div>
+<div id="editBar">
+  <div class="tip">编辑模式 · 点击文字就地修改，点击图片可替换；每个作品右上角可上移/下移/删除/加图。</div>
+  <div class="actions">
+    <button class="btn btn-nl" onmousedown="event.preventDefault()" onclick="insertNewline()">另起一行</button>
+    <button class="btn btn-mobile" onclick="toggleMobilePreview()" id="btnMobilePreview">手机预览</button>
+    <button class="btn btn-exit" onclick="exitEdit()">完成编辑</button>
+    <button class="btn btn-reset" onclick="resetAll()">恢复初始</button>
+    <button class="btn btn-export" onclick="exportData()">导出 JSON</button>
+  </div>
+</div>
+<div id="toast"></div>
+<script>
+/* ============ 默认数据 ============ */
+const ASSET='assets/';
+const DEFAULT_DATA={"hero":{"kicker":"SUN YUANYUAN · 现代艺术 / 工艺美术 / 品牌设计","en":" PORTFOLIO","tagline":"以传统工艺与材料为笔，专注于文化转译、品牌叙事与当代纤维艺术创作，让东方美学在现代生活中落地生根。"},"about":{"intro":["我是孙源源，本硕就读于清华大学美术学院。","我的创作与设计实践跨越纤维艺术、品牌策划、非遗工艺转译与文创产品开发多个维度。曾以核心执行成员身份深度参与第13届「从洛桑到北京」国际纤维艺术双年展全流程，在中国华侨历史博物馆担任策展助理，并自主孵化「青囊」中药哲学文化品牌与「Buplay 布和你玩」手工织物品牌。"],"stats":[{"n":"3.9","l":"综合 GPA"},{"n":"20+","l":"参展 / 获奖成果"},{"n":"2","l":"自主孵化品牌"}],"facts":[{"k":"教育","v":"清华大学\n本科 2020–2024 · 硕士 2024–2027"},{"k":"身份","v":"中共党员 "},{"k":"能力","v":"纤维艺术 · 品牌策划 · 视觉设计\n非遗工艺 · 策展统筹 · 文创开发"},{"k":"软件","v":"Illustrator / Photoshop / InDesign\n编织 / 刺绣 / 缝纫 / 手工纸等工艺"}]},"brands":[{"cat":"品牌 0→1 · 中药哲学当代化","title":"「青囊」Qingnang","en":"Cultural Design Brand","year":"2025 孵化","category":"品牌策划","desc":"清华大学美术学生孵化的文化设计品牌，关注「中药哲学的当代性」，将草本文化符号转译为当代生活诗学。完成品牌定位、核心概念、目标人群与产品体系搭建。","points":["方剂合香珠串系列 · 藏地回响系列","覆盖 品牌定位—产品研发—视觉体系—商业叙事","清华乡村振兴工作站「乡创+」创业营学员项目"],"images":["qingnang/brand_cover.jpg","qingnang/brand_beads_1.jpg","qingnang/brand_beads_2.jpg"],"award":"·Re:Think 2025 联合国开发计划署可持续创意周“非物质文化遗产创意市集”\n·意大利罗马 · 联合国粮农组织（FAO）总部\n·山海青年空间-阿里巴巴内部非遗品牌鉴"},{"cat":"品牌 0→1 · 手工织物原创","title":"Buplay 布和你玩","en":"Handmade Fabric Brand","year":"团队共创 · 商业落地","category":"品牌策划","mainStyle":"width:500px;height:280px;","desc":"「Buplay 布和你玩」是团队从零自主发起的原创织物设计品牌，完整实现从0到1创意策划、设计研发、工艺制作到商业落地的全流程实践项目。sewing 缝补是项目核心工艺语言，fabric 织物是核心创作载体，以缝补联结材料、以重构赋予织物全新生命力。","points":["现代化生活化设计转译×可持续织物再生"],"images":["brands/buplay_3.jpg","brands/buplay_2.jpg","brands/buplay_1.jpg"],"award":"","strip":true,"cover":"brands/buplay_cover.jpg"},{"cat":"非遗文创 · 系列平面设计","title":"傈僳族花鸟历","en":"Lisu Calendar Series","year":"2025","category":"文创设计","desc":"基于傈僳族非遗文化的系列平面设计与文创产品应用：日历、产品包装、书签、文具、冰箱贴、茶叶包装、创意盲盒与数字海报，探索非遗的当代转化与文创落地。","points":["傈僳族文字 × 花鸟历转译","日历 / 包装 / 文具 / 盲盒产品矩阵","非遗数字化传播"],"images":["lisu/brand_1.jpg","lisu/brand_2.jpg","lisu/brand_3.jpg"]}],"fiberGroups":[{"name":"专业装置","items":[{"title":"时间的散文诗","en":"The Poem of Time","year":"2024","desc":"纸浆模塑装置，以手工纸与综合材料构建悬浮的时间意象。","images":["fiber/time_poem_cover.jpg","fiber/time_poem_2.jpg","fiber/time_poem_3.jpg"],"award":"展出于第 13 届「从洛桑到北京」国际纤维艺术双年展、全国大学生美术作品展等；曾获许钦松创作奖全国三等奖。"},{"title":"物生无声","en":"Heaven and Earth Are an Inn","year":"2023","desc":"羊毛湿毡装置，尺寸可变。以白色荒原象征自然的不朽神韵，内部丰富色彩与肌理展现生命的涌动，探讨生命取舍与人文自然的关系。","images":["fiber/mute_1.jpg","fiber/mute_2.jpg"]},{"title":"竹笙","en":"Bamboo & Sheng & Fungus","year":"2022","desc":"传统竹编装置，以竹篾、藤条为媒，将「笙」的菌裙网状结构与竹藤编织工艺结合，呈现「物生故谓之笙」的意象。","images":["fiber/bamboo_1.jpg"],"award":"展出于清华大学美术学院第十二届「爆破」系列展览"},{"title":"「蜓」系列","en":"Dragonfly Series","year":"2021","desc":"刺绣作品系列，结合机绣与手绣，运用锁绣、戗针绣等传统技法，以拼布艺术为延伸，承载蜻蜓深厚的文化寓意。","images":["fiber/dragonfly_1.jpg","fiber/dragonfly_series.jpg"]},{"title":"豆蔻","en":"A Budding Beauty","year":"2021","desc":"羊毛针毡人体雕塑，80×40×60cm。捕捉人体中的哲学、诗歌与音乐，以羊毛毡的亲近质感表达生命每个阶段的美。","images":["fiber/cardamom_cover.jpg"]}]},{"name":"壁毯编织","items":[{"title":"我们总在追寻着远方","en":"What's Past Is Prologue","year":"2022","desc":"高比林壁毯，羊毛线、棉线综合材料，120×120cm\n以诗意编织回应「我感到自己仿佛变得蔚蓝，变得无边无际」","images":["fiber/pursuit_1.png","fiber/pursuit_2.jpg","fiber/pursuit_3.jpg"]},{"title":"乡野寻梦","en":"Cross Creek","year":"2021","desc":"高比林编织，50×30cm\n记录家乡乡野的烟火诗意——看风吹稻田、小鸭子玩水，在炊烟袅袅与暮色四合中安放乡愁。","images":["fiber/creek.jpg"]}]}],"research":[{"name":"文创设计·非遗转化","items":[{"title":"「青囊」器物与产品设计","en":"Qingnang Cultural Products","year":"2025","desc":"中药哲学当代化的系列文创设计：方剂合香珠串、器物与包装，完成从文化洞察、产品研发到视觉体系的完整落地。","images":["qingnang/qn_p00.jpg","qingnang/qn_p01.jpg","qingnang/qn_p02.jpg","qingnang/qn_p03.jpg","qingnang/qn_p04.jpg","qingnang/qn_p05.jpg","qingnang/qn_p06.jpg","qingnang/qn_p07.jpg","qingnang/qn_p08.jpg","qingnang/qn_p09.jpg","qingnang/qn_p10.jpg","qingnang/qn_p11.jpg","qingnang/qn_p12.jpg","qingnang/qn_p13.jpg","qingnang/qn_p14.jpg","qingnang/qn_p15.jpg","qingnang/qn_p16.jpg"],"award":"·Re:Think 2025 联合国开发计划署可持续创意周“非物质文化遗产创意市集”\n·意大利罗马 · 联合国粮农组织（FAO）总部\n·山海青年空间-阿里巴巴内部非遗品牌鉴"},{"title":"傈僳族花鸟历 · 文创应用","en":"Lisu Cultural Products","year":"2025","desc":"将傈僳族文字与花鸟纹样转化为可感知的当代设计语言，探索非遗工艺与平面、文创的创造性转译路径。","images":["lisu/hualiao_cover.jpg","lisu/hualiao_01.jpg","lisu/hualiao_02.jpg","lisu/hualiao_03.jpg","lisu/hualiao_04.jpg","lisu/hualiao_05.jpg","lisu/hualiao_06.jpg","lisu/hualiao_07.jpg","lisu/hualiao_08.jpg","lisu/hualiao_09.jpg","lisu/hualiao_10.jpg","lisu/hualiao_11.jpg","lisu/hualiao_12.jpg","lisu/hualiao_13.jpg","lisu/hualiao_14.jpg","lisu/hualiao_15.jpg","lisu/hualiao_16.jpg","lisu/hualiao_17.jpg","lisu/hualiao_18.jpg","lisu/hualiao_19.jpg","lisu/hualiao_20.jpg","lisu/hualiao_21.jpg","lisu/hualiao_22.jpg","lisu/hualiao_23.jpg","lisu/hualiao_24.jpg"],"strip":true,"award":"原方案获清华大学SDG开放创新马拉松挑战赛三等奖（团队项目）"}]},{"name":"材料实验 · 设计研究项目","items":[{"title":"FIBER MATERIAL LAB","en":"Material Experiment Series","year":"2023","desc":"取于自然，共同生长，归于自然。探索生物材料与纤维媒材的融合，为纤维艺术、染织服装、工业设计等提供原料创新设计。","images":["fiber/materiallab_1.jpg","fiber/materiallab_2.jpg"]},{"title":"对话 Dialogue of Life","en":"Interactive Installation","year":"2023","desc":"基于创新纤维材料的艺术交互装置：以「流动的编织」结合编织工艺与计算机辅助控制技术，用脉搏传感器读取观者心率，驱动装置内液体流动，实现生命间的对话。获挑战杯二等奖。","images":["fiber/dialogue_1.png","fiber/dialogue_2.png"]},{"title":"Spongia 微观仿生","en":"Biomimetic 3D Printing","year":"2022","desc":"基于LCD光固化成型技术的微观仿生增材制造实践，以多孔动植物有机形态的镂空结构单体为建模设计原型。","images":["fiber/spongia_1.png","fiber/spongia_2.png"],"award":"获清华大学第六届3D打印大赛一等奖（团队）"}]}],"aesthetics":[{"title":"清华园记","en":"My Story on Tsinghua Campus","year":"2022","category":"插画","images":["fiber/tsinghua_story.jpg"]},{"title":"七月季夏","en":"Last Month of Summer","year":"2021","category":"插画","images":["fiber/july_summer.jpg"]},{"title":"天青云墨 · 陶瓷与篆刻","en":"Ceramic & Seal Cutting","year":"2022–2023","category":"工艺","images":["fiber/ceramic_seal.jpg"]},{"title":"少数民族女士像","en":"Portrait of an Ethnic Lady","year":"2022","category":"中国画","images":["fiber/ethnic_painting.jpg"]},{"title":"板绘习作","en":"Digital Painting Practice","year":"2022–2023","category":"数字绘画","images":["fiber/digital_painting.jpg"]},{"title":"品牌标志设计","en":"Logo Design","year":"2021–2024","category":"视觉设计","images":["logo/logo_n1.jpg","logo/logo_n2.jpg","logo/logo_n3.jpg"]}],"exps":[{"t":"第 13 届「从洛桑到北京」国际纤维艺术双年展","r":"核心执行成员 · 设计统筹组组长 · 作品集出版","d":"","images":["exps/lausanne_1.jpg","exps/lausanne_2.jpg","exps/lausanne_3.jpg"]},{"t":"毛主席纪念堂壁画《祖国大地》项目","r":"施工初期参与 · 色彩配线","d":"随导师赴山东地毯厂参与启动座谈会；负责画面色彩配线并现场指导织造；协助梳理设计师与工厂分工，建立现场工作流程SOP；设计结项感谢信与纪念证书。","images":["exps/mao_mural_1.jpg","exps/mao_mural_2.jpg","exps/mao_mural_3.jpg"]},{"t":"中国华侨历史博物馆 · 策展助理","r":"展览/策展助理","d":"","images":["exps/qiaobo_1.jpg","exps/qiaobo_2.jpg","exps/qiaobo_3.jpg"]},{"t":"双肩挑德育工作 · 奖助贷专项","r":"德育工作助理（校级岗）","d":""},{"t":"美硕42党支部 · 党支部书记","r":"原党支部书记兼纪检委员","d":""},{"t":"乡村美育与乡创实践","r":"美育村长 · 乡创计划","d":"受聘北京市昌平区兴寿镇「美育村长」；\n参与青梅乡创计划，获中国国际大学生创新大赛北京赛区三等奖"}],"exhibits":[{"yr":"2026","t":"《时间的散文诗》作品入选第三届全国大学生美术作品展览（工艺美术类）"},{"yr":"2026","t":"《时间的散文诗》入选第九届中国纤维艺术展（上海）"},{"yr":"2026","t":"《我们总在追寻着远方》参展「心象新生」清华美院师生染织艺术设计展"},{"yr":"2025","t":"《时间的散文诗》参展第13届「从洛桑到北京」国际纤维艺术双年展"},{"yr":"2025","t":"《时间的散文诗》作品入选「镜中迷宫」第六届纤维艺术新锐展"},{"yr":"2025","t":"《焱》漆画作品入选清华美院教学成果展"},{"yr":"2024","t":"《时间的散文诗》作品获许钦松创作全国评选铜奖，入展全国总选优秀作品展（广东省美术馆）"},{"yr":"2023","t":"《竹笙》参展清华大学美术学院第十二届「爆破」系列展览"}],"honors":[{"yr":"2026","t":"清华大学学生优秀党建与思想政治工作者（党支部书记）"},{"yr":"2026","t":"清华大学三好学生"},{"yr":"2025","t":"清华大学综合优秀奖学金（一等）"},{"yr":"2025","t":"清华大学一·二九辅导员郭秋明奖"},{"yr":"2025","t":"研究生社会工作一等奖学金"},{"yr":"2025","t":"「young·绒」中国创新创意设计大赛 优秀奖"},{"yr":"2025","t":"中国国际大学生创新大赛 北京赛区三等奖"},{"yr":"2024","t":"清华大学优良毕业生"},{"yr":"2023","t":"北京中轴线文化遗产传承与创新大赛 一等奖"},{"yr":"2023","t":"清华大学第四十一届「挑战杯」学生课外学术科技作品竞赛 人文社科赛道二等奖"},{"yr":"2022","t":"清华大学第六届3D打印大赛 一等奖"},{"yr":"2021","t":"国家奖学金"}]};
+
+/* ============ 状态 ============ */
+let DATA=loadData(); let EDITING=false;
+function loadData(){
+  let d=null;
+  try{ const s=localStorage.getItem('yy_portfolio_v2'); if(s) d=JSON.parse(s); }catch(e){}
+  const base=JSON.parse(JSON.stringify(DEFAULT_DATA));
+  if(!d) return base;
+  for(const k in base){ if(d[k]==null || typeof d[k]!==typeof base[k]) d[k]=base[k]; }
+  if(d.about&&d.about.facts) d.about.facts.forEach(f=>{ if(f&&f.v) f.v=f.v.replace(/<br\s*\/?>/gi,'\n'); });
+  d.hero.kicker=base.hero.kicker;
+  return d;
+}
+function saveData(){ try{ localStorage.setItem('yy_portfolio_v2', JSON.stringify(DATA)); }catch(err){ toast('本地存储已达上限，建议压缩图片或减少上传数量'); } }
+function imgPath(p){ if(!p) return ''; return (p.indexOf('http')===0 || p.indexOf('data:')===0) ? p : ASSET+p; }
+function resolvePath(path){ const seg=path.split('.'); let o=DATA; for(const s of seg){ if(o==null) return null; o=o[s]; } return o; }
+function setPath(path,val){ const seg=path.split('.'); const key=seg.pop(); let o=DATA; for(const s of seg){ if(o[s]==null) o[s]={}; o=o[s]; } o[key]=val; }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+const escNl=(s)=>esc(s).replace(/\n/g,'<br>');
+const ed=(p)=>EDITING?`contenteditable="true" spellcheck="false" data-path="${p}"`:'';
+const tools=(key,i)=>EDITING?`<div class="tools">
+  <button class="t-up" data-key="${key}" data-i="${i}" title="上移">↑</button>
+  <button class="t-dn" data-key="${key}" data-i="${i}" title="下移">↓</button>
+  <button class="t-del" data-key="${key}" data-i="${i}" title="删除">✕</button>
+  <button class="t-img" data-key="${key}" data-i="${i}" data-addimg title="添加图片">＋</button>
+</div>`:'';
+
+/* ============ Hero 渲染 ============ */
+function renderHero(){
+  const h=DATA.hero;
+  const k=document.getElementById('heroKicker'), e=document.getElementById('heroEn'), t=document.getElementById('heroTagline');
+  if(EDITING){
+    [['heroKicker','hero.kicker'],['heroEn','hero.en'],['heroTagline','hero.tagline']].forEach(([id,p])=>{
+      const el=document.getElementById(id); el.setAttribute('contenteditable','true'); el.setAttribute('data-path',p);
+    });
+  } else {
+    ['heroKicker','heroEn','heroTagline'].forEach(id=>{ const el=document.getElementById(id); el.removeAttribute('contenteditable'); el.removeAttribute('data-path'); });
+  }
+  k.innerHTML=escNl(h.kicker);
+  e.textContent=h.en;
+  t.innerHTML=escNl(h.tagline);
+}
+/* ============ About 渲染 ============ */
+function renderAbout(){
+  const a=DATA.about;
+  const intro=a.intro.map((p,i)=>`<p ${ed(`about.intro.${i}`)}>${escNl(p)}</p>`).join('');
+  document.getElementById('aboutIntro').innerHTML=intro;
+  document.querySelectorAll('.about-stats .stat').forEach((st,i)=>{
+    st.querySelector('.n').setAttribute('contenteditable', EDITING?'true':'false');
+    if(EDITING) st.querySelector('.n').setAttribute('data-path',`about.stats.${i}.n`); else st.querySelector('.n').removeAttribute('data-path');
+    st.querySelector('.l').setAttribute('contenteditable', EDITING?'true':'false');
+    if(EDITING) st.querySelector('.l').setAttribute('data-path',`about.stats.${i}.l`); else st.querySelector('.l').removeAttribute('data-path');
+    st.querySelector('.n').innerHTML=escNl(a.stats[i].n);
+    st.querySelector('.l').innerHTML=escNl(a.stats[i].l);
+  });
+  const facts=a.facts.map((f,i)=>`<div class="fact-row"><div class="k" ${ed(`about.facts.${i}.k`)}>${escNl(f.k)}</div><div class="v" ${ed(`about.facts.${i}.v`)}>${escNl(f.v)}</div></div>`).join('');
+  document.querySelector('.about-facts').innerHTML=facts;
+}
+/* ============ 品牌渲染 ============ */
+function renderBrands(){
+  const g=document.getElementById('brandBlocks'); g.innerHTML='';
+  DATA.brands.forEach((b,i)=>{
+    const imgs=(b.images&&b.images.length?b.images:['qingnang/q02.jpg','qingnang/q05.jpg']);
+    const cover=b.cover||imgs[0];
+    const main=imgPath(cover);
+    const subs=imgs.slice(1,3);
+    const block=document.createElement('div'); block.className='brand-block'; block.dataset.item='brands';
+    block.innerHTML=`
+      <div class="brand-head">
+        <span class="no" ${ed(`brands.${i}.year`)}>${escNl(b.year||'')}</span>
+        <h3 ${ed(`brands.${i}.title`)}>${escNl(b.title)}</h3>
+        <span class="en" ${ed(`brands.${i}.en`)}>${escNl(b.en||'')}</span>${tools('brands',i)}
+      </div>
+      <div class="brand-grid">
+        <div class="brand-media">
+          <img class="main-img" src="${main}" alt="${esc(b.title)}" loading="eager" ${ed(`brands.${i}.images.0`)} data-imgsrc="${esc(cover)}"${b.mainStyle?` style="${esc(b.mainStyle)}"`:''}>
+          ${!b.strip&&subs.length?`<div class="sub-imgs">${subs.map((p,j)=>`<img src="${imgPath(p)}" alt="" loading="eager" ${ed(`brands.${i}.images.${j+1}`)} data-imgsrc="${esc(p)}">`).join('')}</div>`:''}
+          ${b.strip?`<div class="brand-strip">${imgs.slice(0,3).map((p,j)=>`<img src="${imgPath(p)}" alt="" loading="lazy" data-idx="${j}" ${ed(`brands.${i}.images.${j}`)} data-imgsrc="${esc(p)}">`).join('')}</div>`:''}
+        </div>
+        <div class="brand-info">
+          <div class="cat" ${ed(`brands.${i}.cat`)}>${escNl(b.cat||'')}</div>
+          <p class="desc" ${ed(`brands.${i}.desc`)}>${escNl(b.desc||'')}</p>
+          <div class="award-edit" ${ed(`brands.${i}.award`)}>${escNl(b.award||'')}</div>
+          <div class="points">${(b.points||[]).map((p,j)=>`<div class="point"><b>·</b><span ${ed(`brands.${i}.points.${j}`)}>${escNl(p)}</span></div>`).join('')}</div>
+        </div>
+      </div>`;
+    block.querySelectorAll('img').forEach((im,k)=>{ const idx=parseInt(im.getAttribute('data-idx')||k,10); im.dataset.lightbox=`brands.${i}.images`; im.addEventListener('click',(e)=>{ if(!EDITING) showLightboxByPath(`brands.${i}.images`, idx); }); });
+    g.appendChild(block);
+  });
+  g.insertAdjacentHTML('beforeend', EDITING?`<button class="add-sec" data-addsec="brands">＋ 添加一个品牌项目</button>`:'');
+}
+/* ============ 分组渲染（纤维 / 研究项目通用：大类+作品流） ============ */
+function renderGroups(containerId,key){
+  const g=document.getElementById(containerId); g.innerHTML='';
+  DATA[key].forEach((grp,gi)=>{
+    const sec=document.createElement('div'); sec.className='fiber-group';
+    sec.innerHTML=`<div class="fiber-group-head"><span class="name" ${ed(`${key}.${gi}.name`)}>${escNl(grp.name)}</span><span class="count">${grp.items.length} 件</span>${EDITING?`<button class="t-img t-addgroup" data-addgroup="${gi}" data-key="${key}" title="添加作品">＋ 作品</button>`:''}</div>`;
+    const list=document.createElement('div'); list.className='fiber-list';
+    grp.items.forEach((f,fi)=>{
+      const img=f.images&&f.images[0]?f.images[0]:'fiber/time_poem_1.jpg';
+      const item=document.createElement('div'); item.className='fiber-item'+(f.strip?' lisustrip-item':''); item.dataset.item=`${key}.${gi}.items`;
+      let mediaHtml;
+      if(f.strip && f.images && f.images.length>1){
+        const rest=f.images.slice(1).map((p,j)=>`<img class="strip-thumb" src="${imgPath(p)}" alt="" loading="lazy" data-idx="${j+1}" ${ed(`${key}.${gi}.items.${fi}.images.${j+1}`)} data-imgsrc="${esc(p)}">`).join('');
+        mediaHtml=`
+        <div class="lisustrip-media">
+          <img class="ph ph-cover" src="${imgPath(img)}" alt="${esc(f.title)}" loading="eager" ${ed(`${key}.${gi}.items.${fi}.images.0`)} data-imgsrc="${esc(img)}">
+          <div class="lisustrip-strip">${rest}</div>
+        </div>`;
+      } else {
+        mediaHtml=`<img class="ph" src="${imgPath(img)}" alt="${esc(f.title)}" loading="eager" ${ed(`${key}.${gi}.items.${fi}.images.0`)} data-imgsrc="${esc(img)}">`;
+      }
+      item.innerHTML=`
+        ${mediaHtml}
+        <div class="txt">
+          <div class="top"><h4 ${ed(`${key}.${gi}.items.${fi}.title`)}>${escNl(f.title)}</h4><span class="year" ${ed(`${key}.${gi}.items.${fi}.year`)}>${escNl(f.year||'')}</span></div>
+          <div class="en" ${ed(`${key}.${gi}.items.${fi}.en`)}>${escNl(f.en||'')}</div>
+          <p class="desc" ${ed(`${key}.${gi}.items.${fi}.desc`)}>${escNl(f.desc||'')}</p>
+          <div class="award-edit" ${ed(`${key}.${gi}.items.${fi}.award`)}>${escNl(f.award||'')}</div>
+          <div class="meta">点击查看大图</div>${tools(`${key}.${gi}.items`,fi)}
+        </div>`;
+      item.querySelectorAll('img').forEach((im)=>{
+        const idx=im.classList.contains('strip-thumb')?parseInt(im.getAttribute('data-idx')||'0',10):0;
+        im.dataset.lightbox=`${key}.${gi}.items.${fi}.images`;
+        im.addEventListener('click',(e)=>{ if(!EDITING) showLightboxByPath(`${key}.${gi}.items.${fi}.images`, idx); });
+      });
+      const metaEl=item.querySelector('.meta');
+      if(metaEl) metaEl.addEventListener('click',(e)=>{ if(!EDITING) showLightboxByPath(`${key}.${gi}.items.${fi}.images`, 0); });
+      list.appendChild(item);
+    });
+    sec.appendChild(list);
+    g.appendChild(sec);
+  });
+  g.insertAdjacentHTML('beforeend', EDITING?`<button class="add-sec" data-addgroup-sec data-key="${key}">＋ 添加一个作品分组</button>`:'');
+}
+function renderFibers(){ renderGroups('fiberGroups','fiberGroups'); }
+function renderResearch(){ renderGroups('researchList','research'); }
+/* ============ 审美渲染 ============ */
+function renderAesthetics(){
+  const g=document.getElementById('aesGrid'); g.innerHTML='';
+  DATA.aesthetics.forEach((a,i)=>{
+    const img=a.images&&a.images[0]?a.images[0]:'fiber/tsinghua_story.jpg';
+    const el=document.createElement('div'); el.className='aes-item'; el.dataset.item='aesthetics';
+    el.innerHTML=`
+      <img class="ph" src="${imgPath(img)}" alt="${esc(a.title)}" loading="eager" ${ed(`aesthetics.${i}.images.0`)} data-imgsrc="${esc(img)}">
+      <div class="cat" ${ed(`aesthetics.${i}.category`)}>${escNl(a.category||'')}</div>
+      <h4 ${ed(`aesthetics.${i}.title`)}>${escNl(a.title)}</h4>
+      <div class="en" ${ed(`aesthetics.${i}.en`)}>${escNl(a.en||'')} · ${escNl(a.year||'')}</div>
+      <div class="award-edit" ${ed(`aesthetics.${i}.award`)}>${escNl(a.award||'')}</div>${tools('aesthetics',i)}
+      `;
+    el.querySelector('img').dataset.lightbox=`aesthetics.${i}.images`;
+    el.querySelector('img').addEventListener('click',(e)=>{ if(!EDITING) showLightboxByPath(`aesthetics.${i}.images`); });
+    g.appendChild(el);
+  });
+  g.insertAdjacentHTML('beforeend', EDITING?`<button class="add-sec" data-addsec="aesthetics">＋ 添加一件习作</button>`:'');
+}
+/* ============ 实践渲染 ============ */
+function renderExps(){
+  const g=document.getElementById('expList'); g.innerHTML='';
+  DATA.exps.forEach((e,i)=>{
+    const el=document.createElement('div'); el.className='exp-item'; el.dataset.item='exps';
+    const imgs=(e.images&&e.images.length)?e.images:[];
+    const imgsHtml=imgs.length?`<div class="exp-imgs">${imgs.map((p,j)=>`<img src="${imgPath(p)}" alt="" loading="lazy" data-idx="${j}" ${ed(`exps.${i}.images.${j}`)} data-imgsrc="${esc(p)}">`).join('')}</div>`:'';
+    el.innerHTML=`<div class="t" ${ed(`exps.${i}.t`)}>${escNl(e.t)}</div><div class="r" ${ed(`exps.${i}.r`)}>${escNl(e.r)}</div><div class="d" ${ed(`exps.${i}.d`)}>${escNl(e.d)}</div>${imgsHtml}${tools('exps',i)}`;
+    el.querySelectorAll('img').forEach((im,k)=>{ const idx=parseInt(im.getAttribute('data-idx')||k,10); im.dataset.lightbox=`exps.${i}.images`; im.addEventListener('click',(e)=>{ if(!EDITING) showLightboxByPath(`exps.${i}.images`, idx); }); });
+    g.appendChild(el);
+  });
+  g.insertAdjacentHTML('beforeend', EDITING?`<button class="add-sec" data-addsec="exps">＋ 添加一项实践</button>`:'');
+}
+function renderExhibits(){
+  const g=document.getElementById('exhibitList'); g.innerHTML='';
+  DATA.exhibits.forEach((e,i)=>{
+    const el=document.createElement('div'); el.className='tl-row'; el.dataset.item='exhibits';
+    el.innerHTML=`<div class="yr" ${ed(`exhibits.${i}.yr`)}>${escNl(e.yr)}</div><div class="txt" ${ed(`exhibits.${i}.t`)}>${escNl(e.t)}</div>${tools('exhibits',i)}`;
+    g.appendChild(el);
+  });
+  g.insertAdjacentHTML('beforeend', EDITING?`<button class="add-sec" data-addsec="exhibits">＋ 添加一条参展</button>`:'');
+}
+function renderHonors(){
+  const g=document.getElementById('honorList'); g.innerHTML='';
+  DATA.honors.forEach((h,i)=>{
+    const el=document.createElement('div'); el.className='tl-row'; el.dataset.item='honors';
+    el.innerHTML=`<div class="yr" ${ed(`honors.${i}.yr`)}>${escNl(h.yr)}</div><div class="txt" ${ed(`honors.${i}.t`)}>${escNl(h.t)}</div>${tools('honors',i)}`;
+    g.appendChild(el);
+  });
+  g.insertAdjacentHTML('beforeend', EDITING?`<button class="add-sec" data-addsec="honors">＋ 添加一项荣誉</button>`:'');
+}
+function renderAll(){ renderHero(); renderAbout(); renderFibers(); renderResearch(); renderBrands(); renderAesthetics(); renderExps(); renderExhibits(); renderHonors(); }
+
+/* ============ 灯箱 ============ */
+let LB={list:[],idx:0,path:''};
+function showLightboxByPath(path, at){
+  const arr=resolvePath(path); if(!arr||!arr.length) return;
+  LB.list=arr.filter(a=>a && typeof a==='string'); if(!LB.list.length) return;
+  LB.idx=(typeof at==='number')?Math.min(Math.max(at,0),LB.list.length-1):0;
+  LB.path=path;
+  renderLightbox();
+}
+function renderLightbox(){
+  const img=document.getElementById('lightboxImg');
+  img.src=imgPath(LB.list[LB.idx]);
+  img.classList.remove('lb-zoom');
+  const st=document.querySelector('.lb-stage'); if(st) st.scrollTo(0,0);
+  const c=document.getElementById('lbCount'), multi=LB.list.length>1;
+  c.textContent=multi?((LB.idx+1)+' / '+LB.list.length):'';
+  /* 获奖情况小字：从作品数据读取 award 字段，无则留空 */
+  const awardEl=document.getElementById('lbAward');
+  let aw='';
+  if(LB.path){
+    const it=resolvePath(LB.path.replace(/\.images$/,''));
+    if(it&&it.award) aw=String(it.award);
+  }
+  awardEl.textContent=aw;
+  document.getElementById('lbPrev').style.display=multi?'flex':'none';
+  document.getElementById('lbNext').style.display=multi?'flex':'none';
+  document.getElementById('lightbox').classList.add('on');
+}
+function lbStep(d){ LB.idx=(LB.idx+d+LB.list.length)%LB.list.length; renderLightbox(); }
+function lbClose(){ document.getElementById('lightbox').classList.remove('on'); }
+const lbImg=document.getElementById('lightboxImg'), lbStage=document.querySelector('.lb-stage');
+lbImg.addEventListener('click',e=>{ e.stopPropagation(); lbImg.classList.toggle('lb-zoom'); });
+lbStage.addEventListener('click',e=>{ if(e.target!==lbImg) lbClose(); });
+document.getElementById('lbPrev').addEventListener('click',e=>{ e.stopPropagation(); lbStep(-1); });
+document.getElementById('lbNext').addEventListener('click',e=>{ e.stopPropagation(); lbStep(1); });
+document.getElementById('lightbox').addEventListener('click',e=>{ if(e.target.id==='lightbox') lbClose(); });
+document.getElementById('lightbox').addEventListener('wheel',e=>{ if(lbImg.classList.contains('lb-zoom')) return; e.preventDefault(); lbStep(e.deltaY>0?1:-1); },{passive:false});
+document.addEventListener('keydown',e=>{
+  if(!document.getElementById('lightbox').classList.contains('on')) return;
+  if(e.key==='ArrowRight'||e.key==='ArrowDown'){ e.preventDefault(); lbStep(1); }
+  else if(e.key==='ArrowLeft'||e.key==='ArrowUp'){ e.preventDefault(); lbStep(-1); }
+  else if(e.key==='Escape'){ lbClose(); }
+});
+
+/* ============ 编辑模式 ============ */
+function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('on'); clearTimeout(t._tm); t._tm=setTimeout(()=>t.classList.remove('on'),1600); }
+function enterEdit(){ EDITING=true; document.body.classList.add('editing'); renderAll(); observeReveal(); }
+function exitEdit(){ EDITING=false; document.body.classList.remove('editing'); renderAll(); observeReveal(); }
+/* 手机预览开关：编辑态强制手机版布局 */
+function toggleMobilePreview(){
+  const on=document.documentElement.classList.toggle('preview-mobile');
+  document.getElementById('btnMobilePreview').classList.toggle('on',on);
+  toast(on?'已切换到手机预览':'已退出手机预览');
+}
+/* 管理入口：仅 URL 带 ?edit 时可见，访客不显示 */
+const IS_EDITOR=(location.search+' '+location.hash).toLowerCase().indexOf('edit')>=0;
+const editFab=document.getElementById('editFab');
+if(IS_EDITOR){ editFab.style.display=''; } else { editFab.style.display='none'; }
+editFab.addEventListener('click',()=>{ if(!IS_EDITOR) return; EDITING?exitEdit():enterEdit(); });
+
+/* ============ 上传替换图片（无需输入链接） ============ */
+let pendingImg={path:null,key:null,i:null};
+function openFilePick(path,key,i){
+  pendingImg={path:path||null,key:(key!=null?key:null),i:(i!=null?i:null)};
+  const f=document.getElementById('imgFileInput'); f.value=''; f.click();
+}
+function downscaleImage(file,cb){
+  const maxEdge=1600, quality=0.85, url=URL.createObjectURL(file);
+  const img=new Image();
+  img.onload=()=>{
+    let w=img.naturalWidth,h=img.naturalHeight;
+    const s=Math.min(1,maxEdge/Math.max(w,h)); w=Math.round(w*s); h=Math.round(h*s);
+    const cv=document.createElement('canvas'); cv.width=w; cv.height=h;
+    const cx=cv.getContext('2d'); cx.fillStyle='#fff'; cx.fillRect(0,0,w,h); cx.drawImage(img,0,0,w,h);
+    URL.revokeObjectURL(url);
+    try{ cb(cv.toDataURL('image/jpeg',quality)); }catch(err){ cb(null); }
+  };
+  img.onerror=()=>{ URL.revokeObjectURL(url); cb(null); };
+  img.src=url;
+}
+document.getElementById('imgFileInput').addEventListener('change',(e)=>{
+  const f=document.getElementById('imgFileInput'); const file=e.target.files&&e.target.files[0];
+  if(!file) return;
+  downscaleImage(file,(dataUrl)=>{
+    if(!dataUrl){ toast('图片处理失败，请换一张'); return; }
+    const p=pendingImg;
+    if(p.key!=null){
+      const arr=(DATA[p.key][p.i].images=DATA[p.key][p.i].images||[]);
+      arr.push(dataUrl); saveData(); renderAll(); toast('已添加图片');
+    } else if(p.path){
+      setPath(p.path,dataUrl); saveData(); renderAll(); toast('图片已替换');
+    }
+  });
+});
+
+/* 就地编辑文字 */
+document.addEventListener('input',(e)=>{
+  if(!EDITING) return; const el=e.target;
+  if(el.isContentEditable && el.dataset.path){ setPath(el.dataset.path, el.innerText.replace(/\n+$/,'')); saveData(); }
+});
+/* 「另起一行」：在光标处插入换行，避免回车导致的格式错乱 */
+let activeEditable=null;
+document.addEventListener('focusin',e=>{ activeEditable=(e.target&&e.target.isContentEditable)?e.target:null; });
+function insertNewline(){
+  const el=activeEditable;
+  if(!el){ toast('请先点击要编辑的那段文字'); return; }
+  el.focus();
+  let ok=false;
+  try{ ok=document.execCommand('insertLineBreak'); }catch(err){}
+  if(!ok){
+    try{
+      const sel=window.getSelection();
+      if(sel&&sel.rangeCount){ const r=sel.getRangeAt(0); r.deleteContents(); const br=document.createElement('br'); r.insertNode(br); r.setStartAfter(br); r.collapse(true); sel.removeAllRanges(); sel.addRange(r); }
+    }catch(err){}
+  }
+  el.dispatchEvent(new Event('input'));
+}
+/* 就地替换图片 / 工具条 / 添加 */
+document.addEventListener('click',(e)=>{
+  if(!EDITING) return;
+  const t=e.target;
+  if(t.tagName==='IMG' && t.dataset.path){
+    e.preventDefault(); e.stopPropagation();
+    openFilePick(t.dataset.path);
+    return;
+  }
+  if(t.closest('[data-addimg]')){
+    const btn=t.closest('[data-addimg]'); const key=btn.dataset.key; const i=+btn.dataset.i;
+    openFilePick(null, key, i);
+    return;
+  }
+  if(t.closest('.tools button')){
+    const btn=t.closest('.tools button'); const key=btn.dataset.key; const i=+btn.dataset.i;
+    if(btn.classList.contains('t-up')){ const arr=resolvePath(key); const j=i-1; if(j>=0&&arr){ [arr[i],arr[j]]=[arr[j],arr[i]]; renderAll(); } }
+    else if(btn.classList.contains('t-dn')){ const arr=resolvePath(key); const j=i+1; if(arr&&j<arr.length){ [arr[i],arr[j]]=[arr[j],arr[i]]; renderAll(); } }
+    else if(btn.classList.contains('t-del')){ if(confirm('删除此项？')){ resolvePath(key).splice(i,1); renderAll(); } }
+    return;
+  }
+  if(t.closest('[data-addsec]')){
+    const key=t.closest('[data-addsec]').dataset.addsec;
+    const empty={brands:()=>({cat:'品牌 0→1',title:'新品牌项目',en:'',year:'2026',category:'品牌策划',desc:'在这里描述品牌项目……',points:[],images:[]}),
+      aesthetics:()=>({title:'新习作',en:'',year:'2026',category:'插画',images:[]}),
+      exps:()=>({t:'新实践项目',r:'角色 / 职责',d:'在这里填写项目描述……',images:[]}),
+      exhibits:()=>({yr:'2026',t:'新参展成果'}),
+      honors:()=>({yr:'2026',t:'新荣誉'})}[key]();
+    DATA[key].push(empty); saveData(); renderAll(); return;
+  }
+  if(t.closest('[data-addgroup]')){
+    const b=t.closest('[data-addgroup]'); const gi=+b.dataset.addgroup; const key=b.dataset.key||'fiberGroups';
+    DATA[key][gi].items.push({title:'新作品',en:'',year:'2026',desc:'在这里描述作品……',images:[]});
+    saveData(); renderAll(); return;
+  }
+  if(t.closest('[data-addgroup-sec]')){
+    const key=t.closest('[data-addgroup-sec]').dataset.key||'fiberGroups';
+    DATA[key].push({name:'新分组', items:[{title:'新作品',en:'',year:'2026',desc:'在这里描述作品……',images:[]}]});
+    saveData(); renderAll(); return;
+  }
+  if(t.closest('[data-lightbox]')){ e.stopPropagation(); return; }
+});
+
+/* ============ 出场动效 ============ */
+function observeReveal(){
+  const els=document.querySelectorAll('.rv');
+  els.forEach(el=>{ el.classList.remove('on'); });
+  if(!('IntersectionObserver' in window)){ els.forEach(el=>el.classList.add('on')); return; }
+  const io=new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('on'); io.unobserve(en.target); } });
+  },{threshold:0.12, rootMargin:'0px 0px -8% 0px'});
+  els.forEach(el=>io.observe(el));
+  // 已可见的立即显示
+  els.forEach(el=>{ const r=el.getBoundingClientRect(); if(r.top<window.innerHeight*0.9) el.classList.add('on'); });
+}
+
+/* 状态管理 */
+function resetAll(){ if(confirm('恢复为初始内容？此操作将清除所有自定义修改。')){ localStorage.removeItem('yy_portfolio_v2'); DATA=JSON.parse(JSON.stringify(DEFAULT_DATA)); renderAll(); toast('已恢复初始内容'); } }
+function exportData(){ const blob=new Blob([JSON.stringify(DATA,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='孙源源作品集数据.json'; a.click(); }
+
+/* 键盘 E 切换 */
+document.addEventListener('keydown',e=>{ if(IS_EDITOR&&e.key.toLowerCase()==='e'&&!e.target.closest('input,textarea,[contenteditable]')){ EDITING?exitEdit():enterEdit(); } });
+
+/* 初始渲染 */
+renderAll();
+observeReveal();
+</script>
+</body>
+</html>
